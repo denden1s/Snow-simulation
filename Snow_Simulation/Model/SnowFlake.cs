@@ -6,12 +6,18 @@ namespace Snow_simulation
   {
     private int _x, _y, _stepByX, _stepByY;
 
-    public int X { get { return _x; } }
-    public int Y { get { return _y; } }
+    public int X { 
+      get { return _x; }
+      set { _x = (int)Math.Abs(value); }
+    }
+    public int Y { 
+      get { return _y; }
+      set { _y = (int)Math.Abs(value); }
+    }
 
     public int StepX { 
       get { return _stepByX; }
-      set { _stepByX = (int)Math.Abs(value); }
+      set { _stepByX = value; }
     }
     public int StepY { 
       get { return _stepByY; }
@@ -25,17 +31,9 @@ namespace Snow_simulation
       _stepByX = stepX;
       _stepByY = stepY;
     }
-    public void MoveRight()
+    public void MoveByX()
     {
       _x += _stepByX;
-    }
-    public void MoveLeft()
-    {
-      _x -= _stepByX;
-    }
-    public void MoveUp()
-    {
-      _y -= _stepByY;
     }
     public void MoveDown()
     {

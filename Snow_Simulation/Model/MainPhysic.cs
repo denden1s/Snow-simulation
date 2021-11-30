@@ -16,12 +16,12 @@ namespace Snow_simulation
     private IDrawing _draw;
     private Stopwatch timerForGenFlake;
     private Stopwatch timer;
-    private bool _stopSimulation;
 
-    private int _width, _height, _fpsCounter, _fps, _generationPeriod;
+    private int _width, _height, _fpsCounter, _fps, _generationPeriod, _yMove, _xMove;
     public string FPS { get { return Convert.ToString(_fps); } }
-    public bool StopSimulation { set { _stopSimulation = value; } }
     public double GenerationSecond { set { _generationPeriod = (int)(Math.Round(value,3) * 1000); } }
+    public int MoveByY { get { return _yMove; } set { _yMove = Math.Abs(value); } }
+    public int MoveByX { get { return _xMove; } set { _xMove = value; } }
     private void SetFps()
     {
       timer.Start();
@@ -71,7 +71,12 @@ namespace Snow_simulation
           if(sf.Y < _snowDrift.MaxYPos(sf.X) - sf.StepY)
           {
             //
+            sf.StepY = MoveByY;
+            sf.StepX = MoveByX;
+
             sf.MoveDown();
+            if(sf.X < _width - sf.StepX - 1 && sf.X > 0 + sf.StepX + 1)
+              sf.MoveByX();
           }
           else
           {
@@ -82,7 +87,13 @@ namespace Snow_simulation
         else
         {
           if(sf.Y <= _height)
-            sf.MoveDown();// движение в стороны
+          {
+            sf.MoveDown();
+            sf.StepY = MoveByY;
+            sf.StepX = MoveByX;
+            if(sf.X < _width - sf.StepX && sf.X > 0 + sf.StepX)
+              sf.MoveByX();
+          }
           else
           {
             _snowDrift.Add(sf.X, sf.Y);
@@ -98,8 +109,9 @@ namespace Snow_simulation
 
     public MainPhysic(IDrawing draw, int width, int height, int genTiming = 100)
     {
-      _stopSimulation = false;
       _fpsCounter = 0;
+      _yMove = 0;
+      _xMove = 0;
       _fps = 0;
       _width = width;
       _height = height;
@@ -112,14 +124,14 @@ namespace Snow_simulation
     }
 
     public async void Simulate()
-    {
-      while(!_stopSimulation)
-      {
-        await Task.Run(() => SetFps());
-        await Task.Run(() => GenerateSnow());
-        await Task.Run(() => SnowMove());
-        await Task.Run(() => Draw());
-      }     
+    { 
+          while(true)
+          {
+            await Task.Run(() => SetFps());
+            await Task.Run(() => GenerateSnow());
+            await Task.Run(() => SnowMove());
+            await Task.Run(() => Draw());
+          }
     }
   }
 }
