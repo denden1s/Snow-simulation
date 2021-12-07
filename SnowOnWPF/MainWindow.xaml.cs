@@ -1,64 +1,73 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using Snow_simulation;
 
 namespace SnowOnWPF
 {
-  /// <summary>
-  /// Interaction logic for MainWindow.xaml
-  /// </summary>
   public partial class MainWindow : Window
   {
-    MainPhysic _p;
-    Stopwatch timer = new Stopwatch();
     Drawing _draw;
+    MainPhysic _physic;
+    int _speed, _ofsetByX;
+    bool _needChangePeriod;
     DispatcherTimer _timer;
-    int _speed, _xMove;
+
     public MainWindow()
     {
       InitializeComponent();
-      _speed = 1;
-      _xMove = 0;
       _draw = new Drawing(MainCanvas, (int)MainCanvas.Width, (int)MainCanvas.Height);
-      _p = new MainPhysic(_draw, (int)MainCanvas.Width, (int)MainCanvas.Height);
-      _p.GenerationSecond = 0.100;
+      _needChangePeriod = false;
+      _ofsetByX = 0;
+      _physic = new MainPhysic(_draw, (int)MainCanvas.Width-19, (int)MainCanvas.Height);
+      _speed = 1;
       _timer = new DispatcherTimer();
-      _timer.Tick += new EventHandler(timer_Tick);
-      _timer.Interval = new TimeSpan(0, 0, 1);
+
+      _physic.GenerationSecond = 1;
       SpeedLabel.Content = _speed;
+      _timer.Tick += new EventHandler(Timer_Tick);
+      _timer.Interval = new TimeSpan(0, 0, 1);
     }
 
-
-    private void form_Loaded(object sender, RoutedEventArgs e)
+    private void Form_Loaded(object sender, RoutedEventArgs e)
     {
       _timer.Start();
-      Application.Current.Dispatcher.Invoke(() =>
-      {
-        _p.Simulate();
-      });
+      Application.Current.Dispatcher.Invoke(() => { _physic.Simulate(); });
     }
  
-    private void timer_Tick(object sender, EventArgs e)
+    private void Timer_Tick(object sender, EventArgs e)
     {
-      fpsListener.Content = _p.FPS;
-      int fps = Convert.ToInt32(_p.FPS);
-      _p.MoveByY = _speed;
-      _p.MoveByX = _xMove;
-
+      int fps = Convert.ToInt32(_physic.FPS);
+      fpsListener.Content = _physic.FPS;
+      
+      if(fps < 30)
+      {
+        fpsListener.Foreground = Brushes.Red;
+      }
+      else if (fps < 60)
+      {
+        fpsListener.Foreground = Brushes.Yellow;
+      }
+      else
+      {
+        fpsListener.Foreground = Brushes.Green;
+      }
+      _physic.MoveByX = _ofsetByX;
+      _physic.MoveByY = _speed;
+      if(_needChangePeriod)
+      {
+        _needChangePeriod = false;
+        try
+        {
+          _physic.GenerationSecond = Convert.ToDouble(GenerationTimeTextbox.Text);
+        }
+        catch(Exception ex)
+        {
+          MessageBox.Show(ex.Message);
+        }
+      }
       GC.Collect();
     }
 
@@ -68,17 +77,27 @@ namespace SnowOnWPF
       SpeedLabel.Content = _speed;
     }
 
-
     private void PlusXButton_Click(object sender, RoutedEventArgs e)
     {
-      _xMove++;
-      MoveByX.Content = _xMove;
+      _ofsetByX++;
+      MoveByX.Content = _ofsetByX;
     }
 
     private void MinusXButton_Click(object sender, RoutedEventArgs e)
     {
-      _xMove--;
-      MoveByX.Content = _xMove;
+      _ofsetByX--;
+      MoveByX.Content = _ofsetByX;
+    }
+
+    private void GenerationTimeTextbox_KeyDown(object sender, KeyEventArgs e)
+    {
+      if(GenerationTimeTextbox.Text.Length != 0)
+      {
+        if(e.Key == Key.Enter)
+        {
+          _needChangePeriod = true;
+        }
+      }
     }
 
     private void MinusSpead_Click(object sender, RoutedEventArgs e)
@@ -86,5 +105,6 @@ namespace SnowOnWPF
       _speed--;
       SpeedLabel.Content = _speed;
     }
+
   }
 }

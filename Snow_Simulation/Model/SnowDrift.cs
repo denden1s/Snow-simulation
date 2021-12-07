@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Snow_simulation;
 using System.Linq;
 
@@ -10,46 +8,44 @@ namespace Snow_Simulation.Model
   {
     public List<SnowFlake> flakes { get; private set; }
 
-    private void Sort()
-    {
-      List<SnowFlake> temp = flakes.OrderBy(i => i.X).ToList();
-      flakes = temp;
-    }
     public SnowDrift()
     {
       flakes = new List<SnowFlake>();
     }
 
+    private void SmoothDrift()
+    {
+      for(int j = 0; j < 4; j++)
+      {
+        for(int i = 0; i < flakes.Count - 1; i++)
+        {
+          if(flakes[i].Y + 2 <= flakes[i + 1].Y)
+          {
+            flakes[i].Y++;
+            flakes[i + 1].Y--;
+          }
+        }
+      }      
+    }
+    private void Sort()
+    {
+      List<SnowFlake> temp = flakes.OrderBy(i => i.X).ToList();
+      flakes = temp;
+    }
+    
     public void Add(int x, int y)
     {
-      // зачем передавать объект полностью
       flakes.Add(new SnowFlake(x,y));
       Sort();
+      SmoothDrift();
     }
 
-    public void Remove(int x)
+    public bool ContainsFlakeByX(int x)
     {
-      //перенос точки по оси y на 1 деление вверх -1
-    }
-
-    public bool ContainsSnowByX(int x)
-    {
-      //SnowFlake sf = flakes.Where(i => i.X == flake.X).FirstOrDefault();
-      //if(sf != null)
-      //{
-      //  return true;
-      //}
-      //return false;
       return flakes.Where(i => i.X == x).FirstOrDefault() != null ? true : false;
     }
 
-    public int MaxYPos(int x)
-    {
-      return (from sf in flakes
-              where sf.X == x
-              select sf.Y).FirstOrDefault();
-    }
-
+    //Need to swap dots in polygon (optimize)
     public void ReplaceDots(SnowFlake flake)
     {
       SnowFlake sf = flakes.Where(i => i.X == flake.X).FirstOrDefault();
@@ -59,6 +55,14 @@ namespace Snow_Simulation.Model
         flakes.Add(flake);
         Sort();
       }
+    }
+
+    //Need to find in drift dot by x
+    public int Y(int x)
+    {
+      return (from sf in flakes
+              where sf.X == x
+              select sf.Y).FirstOrDefault();
     }
   }
 }

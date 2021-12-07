@@ -5,9 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SnowOnWPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="1000" Width="1000" Loaded="form_Loaded">
+        Title="Snow" Height="637" Width="500" Loaded="Form_Loaded" FontFamily="Malgun Gothic" FontSize="20" HorizontalContentAlignment="Left" MaxHeight="637" MaxWidth="500" MinHeight="635" MinWidth="500">
     <Grid Name="Grid1" Background="#FF786B6B">
-        <Canvas Name="MainCanvas" Background="#FF0F0F0F" Margin="0,0,440,484" RenderTransformOrigin="0.5,0.5" Height="500" Width="500">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="22*"/>
+            <ColumnDefinition Width="67*"/>
+            <ColumnDefinition Width="50*"/>
+            <ColumnDefinition Width="107*"/>
+        </Grid.ColumnDefinitions>
+        <Canvas Name="MainCanvas" Background="#FF0F0F0F" Margin="0,0,0,121" RenderTransformOrigin="0.5,0.5" Height="500" Grid.ColumnSpan="5" Width="500">
             <Canvas.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -17,22 +24,21 @@
                 </TransformGroup>
             </Canvas.RenderTransform>
         </Canvas>
-        <Label x:Name="FPS" HorizontalAlignment="Left" Margin="10,510,0,0" VerticalAlignment="Top" FontFamily="Malgun Gothic" FontSize="16">
+        <Label x:Name="FPS" HorizontalAlignment="Left" Margin="2,503,0,0" VerticalAlignment="Top" FontFamily="Malgun Gothic" FontSize="16" Grid.Column="1" Grid.ColumnSpan="2">
             <Label Content="FPS:" FontSize="20"/>
         </Label>
-        <Label x:Name="fpsListener" Content="0" HorizontalAlignment="Left" Margin="66,515,0,0" VerticalAlignment="Top" FontFamily="Malgun Gothic" FontSize="20"/>
-        <Label Content="Скорость:" HorizontalAlignment="Left" Margin="13,565,0,0" VerticalAlignment="Top" FontFamily="Malgun Gothic" FontSize="20"/>
-        <Label Content="Направление" HorizontalAlignment="Left" Margin="251,565,0,0" VerticalAlignment="Top" FontFamily="Malgun Gothic" FontSize="20"/>
-        <Button x:Name="MinusXButton" Content="&lt;&lt;" HorizontalAlignment="Left" Margin="390,570,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.53,0.703" FontFamily="Malgun Gothic" FontSize="20" Click="MinusXButton_Click"/>
-        <Button x:Name="PlusXButton" Content="&gt;&gt;" Margin="449,570,522,383" FontFamily="Malgun Gothic" FontSize="20" Click="PlusXButton_Click"/>
-        <Button x:Name="PauseButton" Content="Пауза" HorizontalAlignment="Left" Margin="121,518,0,0" VerticalAlignment="Top" FontFamily="Malgun Gothic" FontSize="20" Click="PauseButton_Click"/>
-        <Label Content="Интервал генерации снежинок:" HorizontalAlignment="Left" Margin="13,623,0,0" VerticalAlignment="Top" FontFamily="Malgun Gothic" FontSize="20"/>
-        <TextBox x:Name="GenerationTimeTextbox" HorizontalAlignment="Left" Margin="329,632,0,0" Text="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="60" FontFamily="Malgun Gothic" FontSize="20" TextAlignment="Center"/>
-        <Label Content="C" HorizontalAlignment="Left" Margin="396,628,0,0" VerticalAlignment="Top" FontFamily="Malgun Gothic" FontSize="20"/>
-        <Button x:Name="MinusSpead" Content="&lt;&lt;" HorizontalAlignment="Left" Margin="118,568,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.53,0.703" FontFamily="Malgun Gothic" FontSize="20" Click="MinusSpead_Click"/>
-        <Button x:Name="PlusSpeed" Content="&gt;&gt;" Margin="186,568,783,385" FontFamily="Malgun Gothic" FontSize="20" Click="PlusSpeed_Click"/>
-        <Label x:Name="SpeedLabel" Content="0" HorizontalAlignment="Left" Margin="157,565,0,0" VerticalAlignment="Top" FontFamily="Malgun Gothic" FontSize="20"/>
-        <Label x:Name="MoveByX" Content="0" HorizontalAlignment="Left" Margin="424,567,0,0" VerticalAlignment="Top" FontFamily="Malgun Gothic" FontSize="20"/>
+        <Label x:Name="fpsListener" Content="0" HorizontalAlignment="Left" Margin="18,507,0,0" VerticalAlignment="Top" FontFamily="Malgun Gothic" FontSize="20" Grid.Column="2"/>
+        <Label Content="Скорость:" HorizontalAlignment="Left" Margin="4,547,0,0" VerticalAlignment="Top" FontFamily="Malgun Gothic" FontSize="20" Grid.Column="1" Grid.ColumnSpan="2"/>
+        <Label Content="Направление" HorizontalAlignment="Left" Margin="75,547,0,0" VerticalAlignment="Top" FontFamily="Malgun Gothic" FontSize="20" Grid.ColumnSpan="2" Grid.Column="3"/>
+        <Button x:Name="MinusXButton" Content="&lt;&lt;" HorizontalAlignment="Left" Margin="107,552,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.53,0.703" FontFamily="Malgun Gothic" FontSize="20" Click="MinusXButton_Click" Width="30" Height="30" Grid.Column="4"/>
+        <Label Content="Интервал генерации снежинок:" HorizontalAlignment="Left" Margin="54,505,0,0" VerticalAlignment="Top" FontFamily="Malgun Gothic" FontSize="18" Grid.ColumnSpan="3" Grid.Column="2"/>
+        <TextBox x:Name="GenerationTimeTextbox" HorizontalAlignment="Left" Margin="116,511,0,0" Text="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="60" FontFamily="Malgun Gothic" FontSize="20" TextAlignment="Center" KeyDown="GenerationTimeTextbox_KeyDown" Grid.Column="4"/>
+        <Label Content="C" HorizontalAlignment="Left" Margin="183,507,0,0" VerticalAlignment="Top" FontFamily="Malgun Gothic" FontSize="20" Grid.Column="4"/>
+        <Button x:Name="MinusSpead" Content="&lt;&lt;" HorizontalAlignment="Left" Margin="65,550,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.53,0.703" FontFamily="Malgun Gothic" FontSize="20" Click="MinusSpead_Click" Width="30" Height="30" Grid.Column="2"/>
+        <Label x:Name="SpeedLabel" Content="0" HorizontalAlignment="Left" Margin="104,547,0,0" VerticalAlignment="Top" FontFamily="Malgun Gothic" FontSize="20" Grid.Column="2"/>
+        <Label x:Name="MoveByX" Content="0" HorizontalAlignment="Left" Margin="141,549,0,0" VerticalAlignment="Top" FontFamily="Malgun Gothic" FontSize="20" Grid.Column="4"/>
+        <Button x:Name="PlusSpeedButton" Content="&gt;&gt;" HorizontalAlignment="Left" Margin="130,548,0,0" VerticalAlignment="Top" FontFamily="Malgun Gothic" FontSize="22" Click="PlusSpeed_Click" Grid.ColumnSpan="2" Grid.Column="2"/>
+        <Button x:Name="PlusOffsetByXButton" Content="&gt;&gt;" HorizontalAlignment="Left" Margin="167,553,0,0" VerticalAlignment="Top" FontFamily="Malgun Gothic" FontSize="20" Click="PlusXButton_Click" Grid.Column="4"/>
 
     </Grid>
 </Window>
