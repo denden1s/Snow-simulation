@@ -1,5 +1,6 @@
 using System.Diagnostics;
-namespace Snow_Simulation.Model.MainPhysic
+
+namespace Snow_Simulation.Interfaces
 {
   public interface ISnowGeneration
   {

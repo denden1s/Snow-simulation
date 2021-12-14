@@ -7,7 +7,7 @@ using Snow_Simulation.Model;
 using Snow_Simulation.Model.MainPhysic;
 using Snow_Simulation.Model.SnowDrift;
 
-namespace Snow_simulation
+namespace Snow_Simulation.Model.Physic
 {
   public class MainPhysic
   {

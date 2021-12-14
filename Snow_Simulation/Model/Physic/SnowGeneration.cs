@@ -1,4 +1,6 @@
-namespace Snow_Simulation.Model.MainPhysic
+using Snow_Simulation.Interfaces;
+
+namespace Snow_Simulation.Model.Physic
 {
     public class SnowGeneration : ISnowGeneration
     {

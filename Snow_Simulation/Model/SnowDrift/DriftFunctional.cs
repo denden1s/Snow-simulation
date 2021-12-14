@@ -1,5 +1,8 @@
+using SnowSimulation.Interfaces;
+
 namespace Snow_Simulation.Model.SnowDrift
 {
+  //ToDo: may be make static class
   public class DriftFunctional : ISnowDrift
   {
     public DriftFunctional()

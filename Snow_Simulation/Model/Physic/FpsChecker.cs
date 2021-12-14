@@ -1,8 +1,10 @@
-using System.Diagnostics;
 using System;
-namespace Snow_Simulation.Model.MainPhysic
+using System.Diagnostics;
+using Snow_Simulation.Interfaces;
+
+namespace Snow_Simulation.Model.Physic
 {
-  public class FpsChecker
+  public class FpsChecker : IFpsChecker
   {
     private int _fps, _frames;
     private Stopwatch _timer;
