@@ -4,55 +4,46 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using SnowSimulation.Interfaces;
 using Snow_Simulation.Model;
+using Snow_Simulation.Model.MainPhysic;
+using Snow_Simulation.Model.SnowDrift;
 
 namespace Snow_simulation
 {
   public class MainPhysic
   {
-    private int _width, _height, _fpsCounter, _fps, _generationPeriod, _offsetByY, _offsetByX;
+    private int _width, _height, _offsetByY, _offsetByX;
     private IDrawing _draw;
-    private Stopwatch _fpsTimer, _generationTimer;
+    private DriftFunctional _driftFunctional;
+    private FpsChecker _fpsController;
     private List<SnowFlake> _snow;
     private SnowDrift _snowDrift;
+    private SnowGeneration _snowGeneration;
    
-    public string FPS { get { return Convert.ToString(_fps); } }
-    public double GenerationSecond { set { _generationPeriod = (int)(Math.Round(value,3) * 1000); } }
+    public string FPS { get { return Convert.ToString(_fpsController.FPS); } }
+    public double GenerationSecond { set { _snowGeneration.GenerationSecond = value;} }
     public int MoveByX { get { return _offsetByX; } set { _offsetByX = value; } }
     public int MoveByY { get { return _offsetByY; } set { _offsetByY = Math.Abs(value); } }
 
+    //Списки это ссылочные типы или нет? нужно ли в методе указывать параметр ref???
+    //можно определить необязательные параметры как интерфейсы и указать явно объекты
     public MainPhysic(IDrawing draw, int width, int height, int genTiming = 1000)
     {
       _draw = draw;
-      _fps = 0;
-      _fpsCounter = 0;
-      _fpsTimer = new Stopwatch();
-      _generationPeriod = genTiming;
-      _generationTimer = new Stopwatch();
+      _driftFunctional = new DriftFunctional();
+      _fpsController = new FpsChecker();
       _height = height;
       _offsetByX = 0;
       _offsetByY = 0;
       _snow = new List<SnowFlake>();
-      _snowDrift = new SnowDrift();
+      _snowDrift = new SnowDrift(_driftFunctional);
+      _snowGeneration = new SnowGeneration(width, genTiming);
       _width = width;
     }
 
     private void Draw()
     {
       _draw.Draw(_snow, _snowDrift.flakes);
-      _fpsCounter++;
-    }
-
-    private void GenerateSnow()
-    {
-      _generationTimer.Start();
-      Random randomNum = new Random();
-      if(_generationTimer.ElapsedMilliseconds >= _generationPeriod)
-      {
-        SnowFlake generatedSnowFlake = new SnowFlake(randomNum.Next(0, _width), 0);
-        _snow.Add(generatedSnowFlake);
-        _generationTimer.Stop();
-        _generationTimer.Reset();
-      }
+      _fpsController.Frame++;
     }
 
     private void MoveOnX(SnowFlake flake)
@@ -69,18 +60,6 @@ namespace Snow_simulation
           if(flake.X + flake.StepX > 0)
             flake.MoveByX();
         }
-      }
-    }
-
-    private void SetFps()
-    {
-      _fpsTimer.Start();
-      if(_fpsTimer.ElapsedMilliseconds >= 1000)
-      {
-        _fps = _fpsCounter;
-        _fpsCounter = 0;
-        _fpsTimer.Stop();
-        _fpsTimer.Reset();
       }
     }
 
@@ -131,8 +110,8 @@ namespace Snow_simulation
     {
       while(true)
       {
-        await Task.Run(() => SetFps());
-        await Task.Run(() => GenerateSnow());
+        await Task.Run(() => _fpsController.Calculate());
+        await Task.Run(() => _snowGeneration.Generate(_snow));
         await Task.Run(() => SnowMove());
         await Task.Run(() => Draw());
       }
