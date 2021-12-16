@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Snow_simulation
+namespace Snow_simulation.Model
 {
   public class SnowFlake
   {

@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace Snow_Simulation.Interfaces
+namespace Snow_simulation.Interfaces
 {
   public interface ISnowGeneration
   {

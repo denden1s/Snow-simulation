@@ -1,4 +1,4 @@
-namespace Snow_Simulation.Interfaces
+namespace Snow_simulation.Interfaces
 {
   public interface IFpsChecker
   {

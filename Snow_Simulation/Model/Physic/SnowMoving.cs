@@ -1,5 +1,7 @@
-using Snow_Simulation.Interfaces;
-namespace Snow_Simulation.Model.Physic
+using Snow_simulation.Interfaces;
+using  Snow_simulation.Model.Drift;
+
+namespace Snow_simulation.Model.Physic
 {
   public class SnowMoving : ISnowMoving
   {
@@ -30,7 +32,7 @@ namespace Snow_Simulation.Model.Physic
       List<SnowFlake> itemsToRemove = new List<SnowFlake>();
       foreach(SnowFlake sf in flakes)
       {
-        if(_snowDrift.ContainsFlakeByX(sf.X))
+        if(snowDrift.ContainsFlakeByX(sf.X))
         {
           //Situation when snow not drop on the floor
           if(sf.Y + sf.StepY < snowDrift.Y(sf.X))
@@ -63,9 +65,7 @@ namespace Snow_Simulation.Model.Physic
         }
       }
       foreach(SnowFlake i in itemsToRemove)
-      {
         flakes.Remove(i);
-      }
     }
   }
 }

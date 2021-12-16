@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Snow_simulation;
 
-namespace SnowSimulation.Interfaces
+namespace Snow_simulation.Interfaces
 {
   public interface IDrawing
   {

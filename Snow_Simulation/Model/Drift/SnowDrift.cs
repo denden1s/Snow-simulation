@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Snow_simulation;
+using Snow_simulation.Interfaces;
+using  Snow_simulation.Model;
 
-namespace Snow_Simulation.Model
+namespace Snow_simulation.Model.Drift
 {
   class SnowDrift
   {

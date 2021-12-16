@@ -1,4 +1,6 @@
-namespace SnowSimulation.Interfaces
+using Snow_simulation.Model.Drift;
+
+namespace Snow_simulation.Interfaces
 {
   public interface ISnowDrift
   {

@@ -1,13 +1,11 @@
-using SnowSimulation.Interfaces;
+using Snow_simulation.Interfaces;
 
-namespace Snow_Simulation.Model.SnowDrift
+namespace Snow_simulation.Model.Drift
 {
   //ToDo: may be make static class
   public class DriftFunctional : ISnowDrift
   {
-    public DriftFunctional()
-    {
-    }
+    public DriftFunctional() {}
     public void SmoothDrift(List<SnowDrift> _drift)
     {
       for(int j = 0; j < 4; j++)

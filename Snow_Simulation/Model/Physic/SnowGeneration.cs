@@ -1,6 +1,7 @@
-using Snow_Simulation.Interfaces;
+using Snow_simulation.Interfaces;
+using Snow_simulation.Model;
 
-namespace Snow_Simulation.Model.Physic
+namespace Snow_simulation.Model.Physic
 {
     public class SnowGeneration : ISnowGeneration
     {
@@ -23,7 +24,7 @@ namespace Snow_Simulation.Model.Physic
         if(_generationTimer.ElapsedMilliseconds >= _generationPeriod)
         {
           SnowFlake generatedSnowFlake = new SnowFlake(randomNum.Next(0, _width), 0);
-          _snow.Add(generatedSnowFlake);
+          snow.Add(generatedSnowFlake);
           _timer.Stop();
           _timer.Reset();
         }

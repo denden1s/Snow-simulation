@@ -2,22 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using SnowSimulation.Interfaces;
-using Snow_Simulation.Model;
-using Snow_Simulation.Model.MainPhysic;
-using Snow_Simulation.Model.SnowDrift;
+using Snow_simulation.Interfaces;
+using Snow_simulation.Model.Physic;
+using Snow_simulation.Model.Drift;
 
-namespace Snow_Simulation.Model.Physic
+namespace Snow_simulation.Model.Physic
 {
   public class MainPhysic
   {
-
     //Interfaces
     private IFpsChecker _IFpsController;
     private ISnowDrift _ISnowDrift;
     private ISnowGeneration _ISnowGeneration;
     private ISnowMoving _ISnowMoving;
-
 
     private int _width, _height, _offsetByY, _offsetByX;
     private IDrawing _draw;
@@ -36,13 +33,9 @@ namespace Snow_Simulation.Model.Physic
 
     //?Списки это ссылочные типы или нет? нужно ли в методе указывать параметр ref???
     //?можно определить необязательные параметры как интерфейсы и указать явно объекты
-
-    //!Необязательные параметры присваиваются по окончанию конструктора или при вызове???
-    public MainPhysic(int width, int height,IDrawing draw,IFpsCheker fpsCheker = _fpsController,
-      ISnowDrift drift = _snowDrift, ISnowGeneration generation = _snowGeneration, ISnowMoving moving = _snowMoving)
+    public MainPhysic(int width, int height,IDrawing draw,IFpsCheker fpsCheker = null,
+      ISnowDrift drift = null, ISnowGeneration generation = null, ISnowMoving moving = null)
     {
-      //ToDO: I... = null
-      // if i... == null  присвоить значение 
       _draw = draw;
       _driftFunctional = new DriftFunctional();
       _fpsController = new FpsChecker();
@@ -55,21 +48,27 @@ namespace Snow_Simulation.Model.Physic
       _snowMoving = new SnowMoving(height);
       _width = width;
       //ToDO:присвоить значения объектам интерфейсов и поменять реализацию ниже
+      _IFpsController = fpsCheker == null ? _fpsController : fpsCheker;
+      _ISnowDrift = drift == null ? _snowDrift : drift;
+      _ISnowGeneration = generation == null ? _ISnowGeneration : generation;
+      _ISnowMoving = moving == null ? _ISnowMoving : moving;
+
+
     }
 
     private void Draw()
     {
-      _draw.Draw(_snow, _snowDrift.flakes);
-      _fpsController.Frame++;
+      _draw.Draw(_snow, _ISnowDrift.flakes);
+      _IFpsController.Frame++;
     }
 
      public async void Simulate()
     {
       while(true)
       {
-        await Task.Run(() => _fpsController.Calculate());
-        await Task.Run(() => _snowGeneration.Generate(_snow));
-        await Task.Run(() => _snowMoving.Move(_snow,_snowDrift));
+        await Task.Run(() => _IFpsController.Calculate());
+        await Task.Run(() => _ISnowGeneration.Generate(_snow));
+        await Task.Run(() => _ISnowMoving.Move(_snow,_snowDrift));
         await Task.Run(() => Draw());
       }
     }

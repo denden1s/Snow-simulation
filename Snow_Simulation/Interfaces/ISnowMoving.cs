@@ -1,5 +1,7 @@
-using Snow_Simulation.Model;
-namespace Snow_Simulation.Interfaces
+using Snow_simulation.Model;
+using  Snow_simulation.Model.Drift;
+
+namespace Snow_simulation.Interfaces
 {
   public interface ISnowMoving
   {
