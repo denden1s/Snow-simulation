@@ -11,6 +11,14 @@ namespace Snow_Simulation.Model.Physic
 {
   public class MainPhysic
   {
+
+    //Interfaces
+    private IFpsChecker _IFpsController;
+    private ISnowDrift _ISnowDrift;
+    private ISnowGeneration _ISnowGeneration;
+    private ISnowMoving _ISnowMoving;
+
+
     private int _width, _height, _offsetByY, _offsetByX;
     private IDrawing _draw;
     private DriftFunctional _driftFunctional;
@@ -26,9 +34,12 @@ namespace Snow_Simulation.Model.Physic
     public int MoveByX { get { return _offsetByX; } set { _offsetByX = value; } }
     public int MoveByY { get { return _offsetByY; } set { _offsetByY = Math.Abs(value); } }
 
-    //Списки это ссылочные типы или нет? нужно ли в методе указывать параметр ref???
-    //можно определить необязательные параметры как интерфейсы и указать явно объекты
-    public MainPhysic(IDrawing draw, int width, int height, int genTiming = 1000)
+    //?Списки это ссылочные типы или нет? нужно ли в методе указывать параметр ref???
+    //?можно определить необязательные параметры как интерфейсы и указать явно объекты
+
+    //!Необязательные параметры присваиваются по окончанию конструктора или при вызове???
+    public MainPhysic(int width, int height,IDrawing draw,IFpsCheker fpsCheker = _fpsController,
+      ISnowDrift drift = _snowDrift, ISnowGeneration generation = _snowGeneration, ISnowMoving moving = _snowMoving)
     {
       _draw = draw;
       _driftFunctional = new DriftFunctional();
@@ -38,7 +49,7 @@ namespace Snow_Simulation.Model.Physic
       _offsetByY = 0;
       _snow = new List<SnowFlake>();
       _snowDrift = new SnowDrift(_driftFunctional);
-      _snowGeneration = new SnowGeneration(width, genTiming);
+      _snowGeneration = new SnowGeneration(width);
       _snowMoving = new SnowMoving(height);
       _width = width;
     }
