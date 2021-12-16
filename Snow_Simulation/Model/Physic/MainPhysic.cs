@@ -17,7 +17,9 @@ namespace Snow_Simulation.Model.Physic
     private FpsChecker _fpsController;
     private List<SnowFlake> _snow;
     private SnowDrift _snowDrift;
+
     private SnowGeneration _snowGeneration;
+    private SnowMoving _snowMoving;
    
     public string FPS { get { return Convert.ToString(_fpsController.FPS); } }
     public double GenerationSecond { set { _snowGeneration.GenerationSecond = value;} }
@@ -37,6 +39,7 @@ namespace Snow_Simulation.Model.Physic
       _snow = new List<SnowFlake>();
       _snowDrift = new SnowDrift(_driftFunctional);
       _snowGeneration = new SnowGeneration(width, genTiming);
+      _snowMoving = new SnowMoving(height);
       _width = width;
     }
 
@@ -46,73 +49,13 @@ namespace Snow_Simulation.Model.Physic
       _fpsController.Frame++;
     }
 
-    private void MoveOnX(SnowFlake flake)
-    {
-      if(flake.StepX != 0)
-      {
-        if(flake.StepX > 0)
-        {
-          if(flake.X + flake.StepX < _width)
-            flake.MoveByX();
-        }
-        else
-        {
-          if(flake.X + flake.StepX > 0)
-            flake.MoveByX();
-        }
-      }
-    }
-
-    private void SnowMove()
-    {
-      List<SnowFlake> itemsToRemove = new List<SnowFlake>();
-      foreach(SnowFlake sf in _snow)
-      {
-        if(_snowDrift.ContainsFlakeByX(sf.X))
-        {
-          //Situation when snow not drop on the floor
-          if(sf.Y + sf.StepY < _snowDrift.Y(sf.X))
-          {
-            sf.StepY = MoveByY;
-            sf.StepX = MoveByX;
-            sf.MoveDown();
-            MoveOnX(sf);
-          }
-          else
-          {
-            _snowDrift.ReplaceDots(sf);
-            itemsToRemove.Add(sf);
-          }
-        }
-        else
-        {
-          if(sf.Y + sf.StepY < _height)
-          {
-            sf.MoveDown();
-            sf.StepY = MoveByY;
-            sf.StepX = MoveByX;
-            MoveOnX(sf);
-          }
-          else
-          {
-            _snowDrift.Add(sf.X, sf.Y);
-            itemsToRemove.Add(sf);
-          }
-        }
-      }
-      foreach(SnowFlake i in itemsToRemove)
-      {
-        _snow.Remove(i);
-      }
-    }   
-
      public async void Simulate()
     {
       while(true)
       {
         await Task.Run(() => _fpsController.Calculate());
         await Task.Run(() => _snowGeneration.Generate(_snow));
-        await Task.Run(() => SnowMove());
+        await Task.Run(() => _snowMoving.Move(_snow,_snowDrift));
         await Task.Run(() => Draw());
       }
     }
