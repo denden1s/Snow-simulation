@@ -41,6 +41,8 @@ namespace Snow_Simulation.Model.Physic
     public MainPhysic(int width, int height,IDrawing draw,IFpsCheker fpsCheker = _fpsController,
       ISnowDrift drift = _snowDrift, ISnowGeneration generation = _snowGeneration, ISnowMoving moving = _snowMoving)
     {
+      //ToDO: I... = null
+      // if i... == null  присвоить значение 
       _draw = draw;
       _driftFunctional = new DriftFunctional();
       _fpsController = new FpsChecker();
@@ -52,6 +54,7 @@ namespace Snow_Simulation.Model.Physic
       _snowGeneration = new SnowGeneration(width);
       _snowMoving = new SnowMoving(height);
       _width = width;
+      //ToDO:присвоить значения объектам интерфейсов и поменять реализацию ниже
     }
 
     private void Draw()
