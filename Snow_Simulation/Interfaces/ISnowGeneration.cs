@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Snow_simulation.Model;
 
 namespace Snow_simulation.Interfaces
 {

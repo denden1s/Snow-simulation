@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Snow_simulation.Interfaces;
 using Snow_simulation.Model.Physic;
 using Snow_simulation.Model.Drift;
+using Snow_simulation.Model;
 
 namespace Snow_simulation.Model.Physic
 {
