@@ -5,28 +5,38 @@ using  Snow_simulation.Model;
 
 namespace Snow_simulation.Model.Drift
 {
-  class SnowDrift
+  public class SnowDrift
   {
-    private ISnowDrift _smoothAndSort;
+    private ISnowDrift _driftFunctions;
     public List<SnowFlake> flakes { get; private set; }
 
     public SnowDrift(ISnowDrift functional)
     {
       flakes = new List<SnowFlake>();
-      _smoothAndSort = functional;
+      _driftFunctions = functional;
     }
     
     public void Add(int x, int y)
     {
       flakes.Add(new SnowFlake(x,y));
-      _smoothAndSort.Sort(flakes);
-      _smoothAndSort.SmoothDrift(flakes);
+      _driftFunctions.Sort(flakes);
+      _driftFunctions.SmoothDrift(flakes);
     }
 
     //? May be changed by SRP, problem: how i can update flakes list
     public bool ContainsFlakeByX(int x)
     {
       return flakes.Where(i => i.X == x).FirstOrDefault() != null ? true : false;
+    }
+    public void ReplaceDots(SnowFlake flake)
+    {
+      SnowFlake sf = flakes.Where(i => i.X == flake.X).FirstOrDefault();
+      if(sf != null)
+      {
+        flakes.Remove(sf);
+        flakes.Add(flake);
+        _driftFunctions.Sort(flakes);
+      }
     }
 
     //Need to find in drift dot by x

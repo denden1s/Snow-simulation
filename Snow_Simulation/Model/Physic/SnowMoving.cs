@@ -1,15 +1,22 @@
+using System.Collections.Generic;
 using Snow_simulation.Interfaces;
 using  Snow_simulation.Model.Drift;
 using Snow_simulation.Model;
+using System;
 
 namespace Snow_simulation.Model.Physic
 {
   public class SnowMoving : ISnowMoving
   {
     public int Height{get; private set;}
-    public SnowMoving(int height)
+    public int MoveByX { get; set; }
+    public int MoveByY { get; set; }
+    public int Width{get; private set;}
+    
+    public SnowMoving(int height, int width)
     {
       Height = height;
+      Width = width;
     }
 
     private void MoveOnX(SnowFlake flake)
@@ -18,7 +25,7 @@ namespace Snow_simulation.Model.Physic
       {
         if(flake.StepX > 0)
         {
-          if(flake.X + flake.StepX < _width)
+          if(flake.X + flake.StepX < Width)
             flake.MoveByX();
         }
         else

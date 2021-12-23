@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using Snow_simulation.Interfaces;
 using Snow_simulation.Model;
+using System.Linq;
 
 namespace Snow_simulation.Model.Drift
 {
@@ -7,7 +9,7 @@ namespace Snow_simulation.Model.Drift
   public class DriftFunctional : ISnowDrift
   {
     public DriftFunctional() {}
-    public void SmoothDrift(List<SnowDrift> _drift)
+    public void SmoothDrift(List<SnowFlake> _drift)
     {
       for(int j = 0; j < 4; j++)
       {
@@ -21,10 +23,10 @@ namespace Snow_simulation.Model.Drift
         }
       }  
     }
-    public void Sort(List<SnowDrift> _drift)
+    public void Sort(List<SnowFlake> _drift)
     {
       List<SnowFlake> temp = _drift.OrderBy(i => i.X).ToList();
-      flakes = temp;
+      _drift = temp;
     }
   }
 }

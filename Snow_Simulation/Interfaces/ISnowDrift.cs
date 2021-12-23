@@ -1,10 +1,12 @@
+using System.Collections.Generic;
+using Snow_simulation.Model;
 using Snow_simulation.Model.Drift;
 
 namespace Snow_simulation.Interfaces
 {
   public interface ISnowDrift
   {
-    public void SmoothDrift(List<SnowDrift> _drift);
-    public void Sort(List<SnowDrift> _drift);
+    void SmoothDrift(List<SnowFlake> _drift);
+    void Sort(List<SnowFlake> _drift);
   }
 }

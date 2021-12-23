@@ -1,5 +1,8 @@
+using System.Collections.Generic;
+using System.Diagnostics;
 using Snow_simulation.Interfaces;
 using Snow_simulation.Model;
+using System;
 
 namespace Snow_simulation.Model.Physic
 {
@@ -19,9 +22,9 @@ namespace Snow_simulation.Model.Physic
       }
       public void Generate(List<SnowFlake> snow)
       {
-        _generationTimer.Start();
+        _timer.Start();
         Random randomNum = new Random();
-        if(_generationTimer.ElapsedMilliseconds >= _generationPeriod)
+        if(_timer.ElapsedMilliseconds >= _generationPeriod)
         {
           SnowFlake generatedSnowFlake = new SnowFlake(randomNum.Next(0, _width), 0);
           snow.Add(generatedSnowFlake);
