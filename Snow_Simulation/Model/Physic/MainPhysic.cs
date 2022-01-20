@@ -63,8 +63,8 @@ namespace Snow_simulation.Model.Physic
       //ToDO:присвоить значения объектам интерфейсов и поменять реализацию ниже
       _IFpsController = fpsCheker == null ? (IFpsChecker)_fpsController : fpsCheker;
       _ISnowDrift = drift == null ? (ISnowDrift)_driftFunctional : drift;
-      _ISnowGeneration = generation == null ? (ISnowGeneration)_ISnowGeneration : generation;
-      _ISnowMoving = moving == null ? (ISnowMoving)_ISnowMoving : moving;
+      _ISnowGeneration = generation == null ? (ISnowGeneration)_snowGeneration : generation;
+      _ISnowMoving = moving == null ? (ISnowMoving)_snowMoving : moving;
     }
 
     private void Draw()
