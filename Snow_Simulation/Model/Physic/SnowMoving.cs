@@ -3,6 +3,7 @@ using Snow_simulation.Interfaces;
 using  Snow_simulation.Model.Drift;
 using Snow_simulation.Model;
 using System;
+using System.Threading.Channels;
 
 namespace Snow_simulation.Model.Physic
 {
@@ -10,10 +11,10 @@ namespace Snow_simulation.Model.Physic
   {
     public int Height{get; private set;}
     public int MoveByX { get; set; }
-    public int MoveByY { get; set; }
+    public int MoveByY { get; set; } = 1;
     public int Width{get; private set;}
     
-    public SnowMoving(int height, int width)
+    public SnowMoving(int width, int height)
     {
       Height = height;
       Width = width;
@@ -40,9 +41,10 @@ namespace Snow_simulation.Model.Physic
       List<SnowFlake> itemsToRemove = new List<SnowFlake>();
       foreach(SnowFlake sf in flakes)
       {
+        
         if(snowDrift.ContainsFlakeByX(sf.X))
         {
-          //Situation when snow not drop on the floor
+          //Situation when snow droped on the floor
           if(sf.Y + sf.StepY < snowDrift.Y(sf.X))
           {
             sf.StepY = MoveByY;
@@ -60,8 +62,8 @@ namespace Snow_simulation.Model.Physic
         {
           if(sf.Y + sf.StepY < Height)
           {
-            sf.MoveDown();
             sf.StepY = MoveByY;
+            sf.MoveDown();
             sf.StepX = MoveByX;
             MoveOnX(sf);
           }

@@ -24,13 +24,14 @@ namespace Snow_simulation.Model.Physic
       {
         _timer.Start();
         Random randomNum = new Random();
-        if(_timer.ElapsedMilliseconds >= _generationPeriod)
+        while(_timer.ElapsedMilliseconds < _generationPeriod)
         {
-          SnowFlake generatedSnowFlake = new SnowFlake(randomNum.Next(0, _width), 0);
-          snow.Add(generatedSnowFlake);
-          _timer.Stop();
-          _timer.Reset();
+          
         }
+        SnowFlake generatedSnowFlake = new SnowFlake(randomNum.Next(0, _width), 0);
+        snow.Add(generatedSnowFlake);
+        _timer.Stop();
+        _timer.Reset();
       }
     }
 }
