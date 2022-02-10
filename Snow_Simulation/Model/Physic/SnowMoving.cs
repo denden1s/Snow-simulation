@@ -3,7 +3,10 @@ using Snow_simulation.Interfaces;
 using  Snow_simulation.Model.Drift;
 using Snow_simulation.Model;
 using System;
-using System.Threading.Channels;
+using System.Threading.Tasks;
+
+
+
 
 namespace Snow_simulation.Model.Physic
 {
@@ -36,46 +39,62 @@ namespace Snow_simulation.Model.Physic
         }
       }
     }
-    public void Move(List<SnowFlake> flakes,SnowDrift snowDrift)
+
+    private void SingleMove(SnowFlake flake, SnowDrift snowDrift, List<SnowFlake> itemsToRemove)
     {
-      List<SnowFlake> itemsToRemove = new List<SnowFlake>();
-      foreach(SnowFlake sf in flakes)
+      Task.Run(()=>
       {
-        
-        if(snowDrift.ContainsFlakeByX(sf.X))
+
+        if(snowDrift.ContainsFlakeByX(flake.X))
         {
-          //Situation when snow droped on the floor
-          if(sf.Y + sf.StepY < snowDrift.Y(sf.X))
+          //Situation when snow not drop on the floor
+          if(flake.Y + flake.StepY < snowDrift.Y(flake.X))
           {
-            sf.StepY = MoveByY;
-            sf.StepX = MoveByX;
-            sf.MoveDown();
-            MoveOnX(sf);
+            flake.StepY = MoveByY;
+            flake.StepX = MoveByX;
+            flake.MoveDown();
+            MoveOnX(flake);
           }
           else
           {
-            snowDrift.ReplaceDots(sf);
-            itemsToRemove.Add(sf);
+            snowDrift.ReplaceDots(flake);
+            itemsToRemove.Add(flake);
           }
         }
         else
         {
-          if(sf.Y + sf.StepY < Height)
+          if(flake.Y + flake.StepY < Height)
           {
-            sf.StepY = MoveByY;
-            sf.MoveDown();
-            sf.StepX = MoveByX;
-            MoveOnX(sf);
+            flake.MoveDown();
+            flake.StepY = MoveByY;
+            flake.StepX = MoveByX;
+            MoveOnX(flake);
+
           }
           else
           {
-            snowDrift.Add(sf.X, sf.Y);
-            itemsToRemove.Add(sf);
+            snowDrift.Add(flake.X, flake.Y);
+            itemsToRemove.Add(flake);
           }
         }
-      }
-      foreach(SnowFlake i in itemsToRemove)
-        flakes.Remove(i);
+      });
+    }
+
+
+    public void Move(List<SnowFlake> flakes,SnowDrift snowDrift)
+    {
+      List<SnowFlake> itemsToRemove = new List<SnowFlake>();
+      foreach(SnowFlake sf in flakes)
+        SingleMove(sf, snowDrift, itemsToRemove);
+      Task.Run(()=>
+      {
+        while(true)
+          if(itemsToRemove.Count > 0)
+          {
+            foreach(SnowFlake i in itemsToRemove)
+              flakes.Remove(i);
+          }
+      });
     }
   }
 }

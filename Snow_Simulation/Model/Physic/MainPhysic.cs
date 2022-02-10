@@ -26,22 +26,25 @@ namespace Snow_simulation.Model.Physic
     private SnowMoving _snowMoving;
    
     public double GenerationSecond { set { _snowGeneration.GenerationSecond = value;} }
-    public int MoveByX { get { return _offsetByX; }
-    set 
-    {
-      _offsetByX = value; 
-      _ISnowMoving.MoveByX = _offsetByX;
-      _snowMoving.MoveByY = _offsetByX;
-    } }
-    public int MoveByY { get { return _offsetByY; } 
-    set
-    { 
-      _offsetByY = Math.Abs(value);
-      _ISnowMoving.MoveByY = _offsetByY;
-      _snowMoving.MoveByY = _offsetByY;
-    } }
-
-    public MainPhysic(int width, int height,
+    public int MoveByX { 
+      get { return _offsetByX; }
+      set 
+      {
+        _offsetByX = value; 
+        _ISnowMoving.MoveByX = _offsetByX;
+        _snowMoving.MoveByY = _offsetByX;
+      } 
+    }
+    public int MoveByY { 
+      get { return _offsetByY; } 
+      set
+      { 
+        _offsetByY = Math.Abs(value);
+        _ISnowMoving.MoveByY = _offsetByY;
+        _snowMoving.MoveByY = _offsetByY;
+      } 
+    }
+    public MainPhysic(int width, int height,IDrawing draw,IFpsChecker fpsCheker = null,
       ISnowDrift drift = null, ISnowGeneration generation = null, ISnowMoving moving = null)
     {
       _driftFunctional = new DriftFunctional();
@@ -62,19 +65,18 @@ namespace Snow_simulation.Model.Physic
 
     public List<SnowFlake> GetSnowFlakes()
     {
-      return _snow;
-    }
-    public SnowDrift GetSnowDrift()
-    {
-      return _snowDrift;
-    }
-     public async void Simulate()
-     {
-       while(true)
+      while(true)
       {
-        await Task.Run(() => _ISnowGeneration.Generate(_snow));
-        await Task.Run(() => _ISnowMoving.Move(_snow,_snowDrift));
+        _draw.Draw(_snow, _snowDrift.flakes);
+        _IFpsController.Frame++;
       }
+    } 
+     public void Simulate()
+    {
+      Task.Run(() => _IFpsController.Calculate());
+      Task.Run(() => _ISnowGeneration.Generate(_snow));
+      Task.Run(() => _ISnowMoving.Move(_snow,_snowDrift));
+      Task.Run(() => Draw());
     }
   }
 }
