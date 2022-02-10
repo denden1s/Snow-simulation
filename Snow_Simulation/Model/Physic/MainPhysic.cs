@@ -29,23 +29,25 @@ namespace Snow_simulation.Model.Physic
    
     public string FPS { get { return Convert.ToString(_fpsController.FPS); } }
     public double GenerationSecond { set { _snowGeneration.GenerationSecond = value;} }
-    public int MoveByX { get { return _offsetByX; }
-    set 
-    {
-      _offsetByX = value; 
-      _ISnowMoving.MoveByX = _offsetByX;
-      _snowMoving.MoveByY = _offsetByX;
-    } }
-    public int MoveByY { get { return _offsetByY; } 
-    set
-    { 
-      _offsetByY = Math.Abs(value);
-      _ISnowMoving.MoveByY = _offsetByY;
-      _snowMoving.MoveByY = _offsetByY;
-    } }
+    public int MoveByX { 
+      get { return _offsetByX; }
+      set 
+      {
+        _offsetByX = value; 
+        _ISnowMoving.MoveByX = _offsetByX;
+        _snowMoving.MoveByY = _offsetByX;
+      } 
+    }
+    public int MoveByY { 
+      get { return _offsetByY; } 
+      set
+      { 
+        _offsetByY = Math.Abs(value);
+        _ISnowMoving.MoveByY = _offsetByY;
+        _snowMoving.MoveByY = _offsetByY;
+      } 
+    }
 
-    //?Списки это ссылочные типы или нет? нужно ли в методе указывать параметр ref???
-    //?можно определить необязательные параметры как интерфейсы и указать явно объекты
     public MainPhysic(int width, int height,IDrawing draw,IFpsChecker fpsCheker = null,
       ISnowDrift drift = null, ISnowGeneration generation = null, ISnowMoving moving = null)
     {
@@ -69,18 +71,18 @@ namespace Snow_simulation.Model.Physic
 
     private void Draw()
     {
-      _draw.Draw(_snow, _snowDrift.flakes);
-      _IFpsController.Frame++;
+      while(true)
+      {
+        _draw.Draw(_snow, _snowDrift.flakes);
+        _IFpsController.Frame++;
+      }
     } 
      public async void Simulate()
     {
-      while(true)
-      {
-        await Task.Run(() => _IFpsController.Calculate());
-        await Task.Run(() => _ISnowGeneration.Generate(_snow));
-        await Task.Run(() => _ISnowMoving.Move(_snow,_snowDrift));
-        await Task.Run(() => Draw());
-      }
+      await Task.Run(() => _IFpsController.Calculate());
+      await Task.Run(() => _ISnowGeneration.Generate(_snow));
+      await Task.Run(() => _ISnowMoving.Move(_snow,_snowDrift));
+      await Task.Run(() => Draw());
     }
   }
 }

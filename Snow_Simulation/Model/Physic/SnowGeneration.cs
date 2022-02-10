@@ -6,32 +6,32 @@ using System;
 
 namespace Snow_simulation.Model.Physic
 {
-    public class SnowGeneration : ISnowGeneration
-    {
-      private int _generationPeriod;
-      private Stopwatch _timer;
-      private int _width;
+  public class SnowGeneration : ISnowGeneration
+  {
+    private int _generationPeriod;
+    private Stopwatch _timer;
+    private int _width;
 
-      public double GenerationSecond { set { _generationPeriod = (int)(Math.Round(value,3) * 1000); } }
-     
-      public SnowGeneration(int width,int period = 1000)
-      {
-        _generationPeriod = period;
-        _timer = new Stopwatch();
-        _width = width;
-      }
-      public void Generate(List<SnowFlake> snow)
+    public double GenerationSecond { set { _generationPeriod = (int)(Math.Round(value,3) * 1000); } }
+    
+    public SnowGeneration(int width,int period = 1000)
+    {
+      _generationPeriod = period;
+      _timer = new Stopwatch();
+      _width = width;
+    }
+    public void Generate(List<SnowFlake> snow)
+    {
+      while(true)
       {
         _timer.Start();
         Random randomNum = new Random();
-        while(_timer.ElapsedMilliseconds < _generationPeriod)
-        {
-          
-        }
+        while(_timer.ElapsedMilliseconds < _generationPeriod){}
         SnowFlake generatedSnowFlake = new SnowFlake(randomNum.Next(0, _width), 0);
         snow.Add(generatedSnowFlake);
         _timer.Stop();
         _timer.Reset();
-      }
+      }       
     }
+  }
 }
