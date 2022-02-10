@@ -77,12 +77,12 @@ namespace Snow_simulation.Model.Physic
         _IFpsController.Frame++;
       }
     } 
-     public async void Simulate()
+     public void Simulate()
     {
-      await Task.Run(() => _IFpsController.Calculate());
-      await Task.Run(() => _ISnowGeneration.Generate(_snow));
-      await Task.Run(() => _ISnowMoving.Move(_snow,_snowDrift));
-      await Task.Run(() => Draw());
+      Task.Run(() => _IFpsController.Calculate());
+      Task.Run(() => _ISnowGeneration.Generate(_snow));
+      Task.Run(() => _ISnowMoving.Move(_snow,_snowDrift));
+      Task.Run(() => Draw());
     }
   }
 }
