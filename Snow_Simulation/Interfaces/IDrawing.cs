@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Snow_simulation;
+using Snow_simulation.Model;
 
 namespace Snow_simulation.Interfaces
 {
