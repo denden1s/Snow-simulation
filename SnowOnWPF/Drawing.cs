@@ -5,7 +5,8 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Snow_simulation;
-using SnowSimulation.Interfaces;
+using Snow_simulation.Interfaces;
+using Snow_Simulation.Model;
 using System.Linq;
 
 namespace SnowOnWPF
@@ -40,51 +41,57 @@ namespace SnowOnWPF
 
     private void DrawDrift(List<SnowFlake> drift)
     {
-      _points.Clear();
-      _driftPoints.Clear();
-      _polygon.Points.Clear();
-      _ellipsesPolygon.Clear();
-
-      for(int i = 0; i < _width; i++)
+      lock(drift)
       {
-        SnowFlake sf = drift.Where(q => q.X == i).SingleOrDefault();
-        if(sf != null)
-          _points.Add(new Point(sf.X, sf.Y));
-        else
-          _points.Add(new Point(i, _height));
+        _points.Clear();
+        _driftPoints.Clear();
+        _polygon.Points.Clear();
+        _ellipsesPolygon.Clear();
 
-        _polygon.Points.Add(_points[i]);
-      }
-      GC.Collect();
-      _polygon.Points.Add(new Point(_width, _height));
-      _canvas.Children.Add(_polygon);
-      if(_points.Where(i => i.Y - _height < 0).Count() > 0)
-      {
-        _driftPoints = _points.Where(i => i.Y - _height < 0).ToList();
-        for(int i = 0; i < _driftPoints.Count; i++)
+        for(int i = 0; i < _width; i++)
         {
-          _ellipsesPolygon.Add(new Ellipse());
-          SetEllipseParams(_ellipsesPolygon[i], 10);
-          _canvas.Children.Add(_ellipsesPolygon[i]);
-          _ellipsesPolygon[i].SetValue(Canvas.LeftProperty, (double)_driftPoints[i].X);
-          _ellipsesPolygon[i].SetValue(Canvas.TopProperty, (double)_driftPoints[i].Y - 5);
+          SnowFlake sf = drift.Where(q => q.X == i).SingleOrDefault();
+          if(sf != null)
+            _points.Add(new Point(sf.X, sf.Y));
+          else
+            _points.Add(new Point(i, _height));
+
+          _polygon.Points.Add(_points[i]);
         }
+        GC.Collect();
+        _polygon.Points.Add(new Point(_width, _height));
+        _canvas.Children.Add(_polygon);
+        if(_points.Where(i => i.Y - _height < 0).Count() > 0)
+        {
+          _driftPoints = _points.Where(i => i.Y - _height < 0).ToList();
+          for(int i = 0; i < _driftPoints.Count; i++)
+          {
+            _ellipsesPolygon.Add(new Ellipse());
+            SetEllipseParams(_ellipsesPolygon[i], 10);
+            _canvas.Children.Add(_ellipsesPolygon[i]);
+            _ellipsesPolygon[i].SetValue(Canvas.LeftProperty, (double)_driftPoints[i].X);
+            _ellipsesPolygon[i].SetValue(Canvas.TopProperty, (double)_driftPoints[i].Y - 5);
+          }
+        }
+        GC.Collect();
       }
-      GC.Collect();
     }
 
     private void DrawFlakes(List<SnowFlake> objects)
     {
-      _flakes.Clear();
-      for(int i = 0; i < objects.Count; i++)
+      lock(objects)
       {
-        _flakes.Add(new Ellipse());
-        SetEllipseParams(_flakes[i], 5);
-        _canvas.Children.Add(_flakes[i]);
-        _flakes[i].SetValue(Canvas.LeftProperty, (double)objects[i].X);
-        _flakes[i].SetValue(Canvas.TopProperty, (double)objects[i].Y);
+        _flakes.Clear();
+        for(int i = 0; i < objects.Count; i++)
+        {
+          _flakes.Add(new Ellipse());
+          SetEllipseParams(_flakes[i], 5);
+          _canvas.Children.Add(_flakes[i]);
+          _flakes[i].SetValue(Canvas.LeftProperty, (double)objects[i].X);
+          _flakes[i].SetValue(Canvas.TopProperty, (double)objects[i].Y);
+        }
+        GC.Collect();
       }
-      GC.Collect();
     }
 
     private void SetEllipseParams(Ellipse element, int width)

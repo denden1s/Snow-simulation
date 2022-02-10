@@ -4,8 +4,7 @@ using System.Drawing;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Snow_simulation;
-using SnowSimulation.Interfaces;
+using Snow_simulation.Interfaces;
 
 namespace Snow
 {
@@ -17,7 +16,7 @@ namespace Snow
     {
       _gr = gr;
     }
-    public void Draw(List<SnowFlake> objects)
+    public void Draw(List<SnowFlake> objects, List<SnowFlake> drift)
     {
       List<SnowFlake> temp = objects;
       Pen myPen = new Pen(Color.White);
