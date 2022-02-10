@@ -12,13 +12,11 @@ namespace Snow_simulation.Model.Physic
   public class MainPhysic
   {
     //Interfaces
-    private IFpsChecker _IFpsController;
     private ISnowDrift _ISnowDrift;
     private ISnowGeneration _ISnowGeneration;
     private ISnowMoving _ISnowMoving;
 
     private int _width, _height, _offsetByY, _offsetByX;
-    private IDrawing _draw;
     private DriftFunctional _driftFunctional;
     private FpsChecker _fpsController;
     private List<SnowFlake> _snow;
@@ -27,7 +25,6 @@ namespace Snow_simulation.Model.Physic
     private SnowGeneration _snowGeneration;
     private SnowMoving _snowMoving;
    
-    public string FPS { get { return Convert.ToString(_fpsController.FPS); } }
     public double GenerationSecond { set { _snowGeneration.GenerationSecond = value;} }
     public int MoveByX { 
       get { return _offsetByX; }
@@ -47,11 +44,9 @@ namespace Snow_simulation.Model.Physic
         _snowMoving.MoveByY = _offsetByY;
       } 
     }
-
     public MainPhysic(int width, int height,IDrawing draw,IFpsChecker fpsCheker = null,
       ISnowDrift drift = null, ISnowGeneration generation = null, ISnowMoving moving = null)
     {
-      _draw = draw;
       _driftFunctional = new DriftFunctional();
       _fpsController = new FpsChecker();
       _height = height;
@@ -60,16 +55,15 @@ namespace Snow_simulation.Model.Physic
       _snow = new List<SnowFlake>();
       _snowDrift = new SnowDrift(_driftFunctional);
       _snowGeneration = new SnowGeneration(width);
-      _snowMoving = new SnowMoving(height,width);
+      _snowMoving = new SnowMoving(width, height);
       _width = width;
       //ToDO:присвоить значения объектам интерфейсов и поменять реализацию ниже
-      _IFpsController = fpsCheker == null ? (IFpsChecker)_fpsController : fpsCheker;
       _ISnowDrift = drift == null ? (ISnowDrift)_driftFunctional : drift;
       _ISnowGeneration = generation == null ? (ISnowGeneration)_snowGeneration : generation;
-      _ISnowMoving = moving == null ? (ISnowMoving)_snowMoving : moving;
+      _ISnowMoving = moving == null ? (ISnowMoving) _snowMoving : moving;
     }
 
-    private void Draw()
+    public List<SnowFlake> GetSnowFlakes()
     {
       while(true)
       {

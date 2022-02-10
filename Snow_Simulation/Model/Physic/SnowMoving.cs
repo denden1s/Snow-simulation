@@ -5,16 +5,19 @@ using Snow_simulation.Model;
 using System;
 using System.Threading.Tasks;
 
+
+
+
 namespace Snow_simulation.Model.Physic
 {
   public class SnowMoving : ISnowMoving
   {
     public int Height{get; private set;}
     public int MoveByX { get; set; }
-    public int MoveByY { get; set; }
+    public int MoveByY { get; set; } = 1;
     public int Width{get; private set;}
     
-    public SnowMoving(int height, int width)
+    public SnowMoving(int width, int height)
     {
       Height = height;
       Width = width;
@@ -41,6 +44,7 @@ namespace Snow_simulation.Model.Physic
     {
       Task.Run(()=>
       {
+
         if(snowDrift.ContainsFlakeByX(flake.X))
         {
           //Situation when snow not drop on the floor
@@ -65,6 +69,7 @@ namespace Snow_simulation.Model.Physic
             flake.StepY = MoveByY;
             flake.StepX = MoveByX;
             MoveOnX(flake);
+
           }
           else
           {
