@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
-using Snow_simulation;
+using Snow_simulation.Model.Physic;
 
 namespace SnowOnWPF
 {
@@ -21,7 +21,7 @@ namespace SnowOnWPF
       _draw = new Drawing(MainCanvas, (int)MainCanvas.Width, (int)MainCanvas.Height);
       _needChangePeriod = false;
       _ofsetByX = 0;
-      _physic = new MainPhysic(_draw, (int)MainCanvas.Width-19, (int)MainCanvas.Height);
+      _physic = new MainPhysic((int)MainCanvas.Width-19, (int)MainCanvas.Height, _draw);
       _speed = 1;
       _timer = new DispatcherTimer();
 

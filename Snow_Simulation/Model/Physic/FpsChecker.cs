@@ -24,17 +24,14 @@ namespace Snow_simulation.Model.Physic
     }
     public void Calculate()
     {
-      while(true)
+      _timer.Start();
+      if(_timer.ElapsedMilliseconds >= 1000)
       {
-        _timer.Start();
-        if(_timer.ElapsedMilliseconds >= 1000)
-        {
-          _fps = _frames;
-          _frames = 0;
-          _timer.Stop();
-          _timer.Reset();
-        }
-      }     
+        _fps = _frames;
+        _frames = 0;
+        _timer.Stop();
+        _timer.Reset();
+      }
     }
   }
 }
