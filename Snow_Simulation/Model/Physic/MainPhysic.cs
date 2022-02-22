@@ -43,9 +43,7 @@ namespace Snow_simulation.Model.Physic
       _ISnowMoving.MoveByY = _offsetByY;
       _snowMoving.MoveByY = _offsetByY;
     } }
-
-    //?Списки это ссылочные типы или нет? нужно ли в методе указывать параметр ref???
-    //?можно определить необязательные параметры как интерфейсы и указать явно объекты
+    
     public MainPhysic(int width, int height,IDrawing draw,IFpsChecker fpsCheker = null,
       ISnowDrift drift = null, ISnowGeneration generation = null, ISnowMoving moving = null)
     {
