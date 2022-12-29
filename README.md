@@ -14,4 +14,4 @@
 
 This app consist of two parts:
 1. Library, which contain logic of generating snow, drift and physic. 
-2. Main app. This part realize interface for drawing objects and change states of speed, generetion periodicity and way.
+2. Main app. This part realize interface for drawing objects and change states of speed, generation periodicity and way.
